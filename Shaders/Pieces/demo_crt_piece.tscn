@@ -1,0 +1,35 @@
+[gd_scene load_steps=4 format=3 uid="uid://b7gqxgvi5swqa"]
+
+[ext_resource type="Texture2D" uid="uid://dq5rtcj4ugaqp" path="res://Images/Pieces/wb.png" id="1_y7ig2"]
+[ext_resource type="Shader" path="res://Shaders/crt.gdshader" id="2_q463p"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yretx"]
+shader = ExtResource("2_q463p")
+shader_parameter/resolution = Vector2(320, 180)
+shader_parameter/scan_line_amount = 1.0
+shader_parameter/warp_amount = 0.1
+shader_parameter/noise_amount = 0.03
+shader_parameter/interference_amount = 0.2
+shader_parameter/grille_amount = 0.1
+shader_parameter/grille_size = 1.0
+shader_parameter/vignette_amount = 0.6
+shader_parameter/vignette_intensity = 0.4
+shader_parameter/aberation_amount = 0.5
+shader_parameter/roll_line_amount = 0.3
+shader_parameter/roll_speed = 1.0
+shader_parameter/scan_line_strength = -8.0
+shader_parameter/pixel_strength = -2.0
+
+[node name="Sprite2D" type="Sprite2D"]
+texture = ExtResource("1_y7ig2")
+centered = false
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+clip_children = 1
+texture = ExtResource("1_y7ig2")
+centered = false
+
+[node name="ColorRect" type="ColorRect" parent="Sprite2D"]
+material = SubResource("ShaderMaterial_yretx")
+offset_right = 150.0
+offset_bottom = 150.0

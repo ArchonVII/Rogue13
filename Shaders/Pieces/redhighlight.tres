@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dofk82fx4umve"]
+
+[ext_resource type="Shader" path="res://Shaders/Pieces/simplehighlight.gdshader" id="1_5idyb"]
+
+[resource]
+shader = ExtResource("1_5idyb")
+shader_parameter/outline_width = 25.0
+shader_parameter/lower_limit = Vector2(10, 15)
+shader_parameter/upper_limit = Vector2(10, 15)
+shader_parameter/color = Color(0.870588, 0, 0, 1)

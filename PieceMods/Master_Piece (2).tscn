@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3 uid="uid://da43f6fsknsx2"]
+
+[ext_resource type="Texture2D" uid="uid://v2oxi5ti176h" path="res://Images/Pieces/wp.png" id="1_0mk8y"]
+[ext_resource type="Script" path="res://Resources/master_piece.gd" id="2_2xdvf"]
+[ext_resource type="Material" uid="uid://oy6ikq34go25" path="res://Shaders/Pieces/static.tres" id="3_hllwi"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bwrrw"]
+
+[node name="PieceScene" type="Sprite2D"]
+clip_children = 1
+texture = ExtResource("1_0mk8y")
+centered = false
+script = ExtResource("2_2xdvf")
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(75, 75)
+scale = Vector2(7.5, 7.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_bwrrw")
+
+[node name="Node2D" type="Node2D" parent="Area2D"]
+position = Vector2(-10, -10)
+scale = Vector2(0.133333, 0.133333)
+
+[node name="TextureRect" type="TextureRect" parent="."]
+material = ExtResource("3_hllwi")
+offset_right = 150.0
+offset_bottom = 150.0
+texture = ExtResource("1_0mk8y")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.572549)
+position = Vector2(75, 76)
+texture = ExtResource("1_0mk8y")

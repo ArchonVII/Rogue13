@@ -1,0 +1,83 @@
+[gd_scene load_steps=4 format=3 uid="uid://c2j0ylelk5mih"]
+
+[ext_resource type="Script" path="res://Scripts/tooltip.gd" id="1_5kieo"]
+[ext_resource type="LabelSettings" uid="uid://cwf0ahl3tl1v0" path="res://Images/Fonts/monospace2.tres" id="2_hi5b2"]
+[ext_resource type="Texture2D" uid="uid://bq83cgrbg08u7" path="res://Assets/Character/Countries/germany.png" id="3_l14i4"]
+
+[node name="Tooltip" type="Popup"]
+size = Vector2i(200, 150)
+visible = true
+mouse_passthrough = true
+script = ExtResource("1_5kieo")
+
+[node name="N" type="NinePatchRect" parent="."]
+self_modulate = Color(1, 1, 1, 0.364706)
+custom_minimum_size = Vector2(100, 150)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="M" type="MarginContainer" parent="N"]
+custom_minimum_size = Vector2(100, 150)
+layout_mode = 0
+offset_left = 10.0
+offset_right = 110.0
+offset_bottom = 150.0
+mouse_filter = 2
+
+[node name="V" type="VBoxContainer" parent="N/M"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Name" type="Label" parent="N/M/V"]
+layout_mode = 2
+text = "<Name>"
+label_settings = ExtResource("2_hi5b2")
+
+[node name="Ind" type="HBoxContainer" parent="N/M/V"]
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+
+[node name="Index" type="Label" parent="N/M/V/Ind"]
+layout_mode = 2
+text = "<index>"
+label_settings = ExtResource("2_hi5b2")
+horizontal_alignment = 1
+
+[node name="Mov" type="HBoxContainer" parent="N/M/V"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+mouse_filter = 2
+
+[node name="Moves" type="Label" parent="N/M/V/Mov"]
+layout_mode = 2
+text = "<moves>"
+label_settings = ExtResource("2_hi5b2")
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="Att" type="HBoxContainer" parent="N/M/V"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Attacks" type="Label" parent="N/M/V/Att"]
+layout_mode = 2
+text = "<attacks>
+"
+label_settings = ExtResource("2_hi5b2")
+vertical_alignment = 3
+
+[node name="Flag" type="TextureRect" parent="N"]
+layout_mode = 2
+offset_left = 125.0
+offset_top = 5.0
+offset_right = 141.0
+offset_bottom = 17.0
+scale = Vector2(2, 2)
+mouse_filter = 2
+texture = ExtResource("3_l14i4")

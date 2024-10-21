@@ -1,0 +1,7 @@
+
+
+Original sprite stays on top
+Add a Sprite2D with the same texture
+add a child color rect to that second sprite
+2nd sprite has clip children
+apply the crt shader

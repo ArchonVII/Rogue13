@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="Piece" load_steps=4 format=3 uid="uid://qgnmm86h1dnh"]
+
+[ext_resource type="Texture2D" uid="uid://cvnw84xvrfdfq" path="res://Images/Pieces/bn.png" id="1_cnqxq"]
+[ext_resource type="Script" path="res://Scripts/piece_resource.gd" id="2_cddum"]
+[ext_resource type="Texture2D" uid="uid://cfa7ebfh10480" path="res://Images/Pieces/wn.png" id="3_4ae6m"]
+
+[resource]
+script = ExtResource("2_cddum")
+ID = null
+name = "knight"
+color = 1
+type = 1
+standard_moves = null
+legal_moves = null
+all_moves = null
+square = null
+previous_square = null
+position = null
+previous_position = null
+target = null
+state = null
+checkstatus = null
+white_image = ExtResource("3_4ae6m")
+black_image = ExtResource("1_cnqxq")
+description = null
+pinned = null
+pinned_to = null
+defending = null
+attacking = null
+attacked_by = null
+total_moves = null

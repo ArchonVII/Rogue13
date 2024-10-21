@@ -1,0 +1,97 @@
+func _ready():
+		# don't mind that the x and y variables are switched...
+	"""var location = set_grid()
+	for i in range(0, Global.board_size):
+		var panel = create_panel(i, "main")
+		panel.set_position(Vector2(location[i]))
+		panel.set("index",i)
+		#add_child(panel)			RE ENABLE FOR BOARD PANELS! DANGER
+
+		# connect
+		var area2d = panel.get_node("Area2D")
+		for j in panel.get_children():
+			if j is Area2D:
+				j.connect("input_event", Callable(self, "_on_piece_clicked").bind(panel))
+				j.connect("mouse_entered", Callable(self, "_on_square_hovered").bind(panel))
+				j.connect("mouse_exited", Callable(self, "_on_piece_unhovered").bind(panel))
+
+	if debug_board:
+		set_debug()"""
+
+
+
+
+func set_grid():
+	var x = 0
+	while x < 8:
+		for y in range(0, 8):
+			var loc = Vector2((y) * Global.square_size, (x) * Global.square_size)
+			board_coordinates.append(loc)
+		x += 1
+	return board_coordinates
+
+func set_debug():
+	var x = 0
+	while x < 8:
+		for y in range(0, 8):
+			var loc = Vector2((y) * Global.square_size + (Global.square_size*10), ((x) * Global.square_size) )
+			debug_coordinates.append(loc)
+		x += 1
+	print("debug coord ", debug_coordinates)
+
+	for k in range(0, Global.board_size):
+		var debugpanel = create_panel(k, "debug")
+		debugpanel.set_position(Vector2(debug_coordinates[k]))
+		add_child(debugpanel)
+
+		var area2d = debugpanel.get_node("Area2D")
+		for j in debugpanel.get_children():
+			if j is Area2D:
+				j.connect("input_event", Callable(self, "_on_piece_clicked").bind(debugpanel))
+				j.connect("mouse_entered", Callable(self, "_on_square_hovered").bind(debugpanel))
+				j.connect("mouse_exited", Callable(self, "_on_piece_unhovered").bind(debugpanel))
+
+	return debug_coordinates
+
+func create_panel(index, board):
+
+	var panel = Sprite2D.new()
+	if board == "main":
+		panel.name = GlobalUtility.square_names[index]
+	elif board == "debug":
+		panel.name = str("debug-" + str(GlobalUtility.square_names[index]))
+		print(panel.name)
+
+	# add colorrect
+	var colorrect = ColorRect.new()
+	colorrect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	colorrect.set_custom_minimum_size(Vector2(Global.square_size,Global.square_size))
+
+	# ADD TEXTURERECT
+	var rect = TextureRect.new()
+	if GlobalUtility.square_color_order[index] == "white":
+		colorrect.color = Color(GlobalUtility.white_square_color)
+		#rect.texture = load("res://Images/Squares/WhiteSquare.png")
+		panel.set("color", "white")
+	else:
+		colorrect.color = Color(GlobalUtility.black_square_color)
+		#rect.texture = load("res://Images/Squares/BlackSquare.png")
+		panel.set("color", "black")
+	#panel.add_child(rect)
+	panel.add_child(colorrect)
+	panel.add_child(create_area2d_with_collision())
+
+	#return panel
+
+func create_area2d_with_collision() -> Area2D:
+	var area = Area2D.new()
+
+	# Create a collision shape and attach it to the Area2D
+	var collision_shape = CollisionShape2D.new()
+	var shape = RectangleShape2D.new()
+	shape.extents = Vector2(Global.square_size/2, Global.square_size/2)  # Half the size of Vector2(150, 150)
+	collision_shape.shape = shape
+	collision_shape.position = Vector2(Global.square_size/2, Global.square_size/2)
+	area.add_child(collision_shape)
+
+	return area

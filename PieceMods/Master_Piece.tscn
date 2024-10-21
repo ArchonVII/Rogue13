@@ -1,0 +1,51 @@
+[gd_scene load_steps=7 format=3 uid="uid://dt7ofyvbyofmr"]
+
+[ext_resource type="Texture2D" uid="uid://v2oxi5ti176h" path="res://Images/Pieces/wp.png" id="1_e51ib"]
+[ext_resource type="Script" path="res://Resources/master_piece.gd" id="2_1bfga"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bwrrw"]
+
+[sub_resource type="Gradient" id="Gradient_a5fmt"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_xe6v0"]
+frequency = 0.0116
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_yxb7q"]
+color_ramp = SubResource("Gradient_a5fmt")
+noise = SubResource("FastNoiseLite_xe6v0")
+
+[node name="PieceScene" type="Sprite2D"]
+texture = ExtResource("1_e51ib")
+centered = false
+script = ExtResource("2_1bfga")
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(75, 75)
+scale = Vector2(7.5, 7.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+visible = false
+shape = SubResource("RectangleShape2D_bwrrw")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+visible = false
+position = Vector2(75.5, 76.75)
+scale = Vector2(0.294922, 0.301758)
+color = Color(1, 0.027451, 0.054902, 1)
+energy = 10.48
+texture = SubResource("NoiseTexture2D_yxb7q")
+
+[node name="DirectionalLight2D" type="DirectionalLight2D" parent="."]
+visible = false
+color = Color(1, 0, 0, 1)
+energy = 3.08
+
+[node name="Node2D" type="Sprite2D" parent="."]
+modulate = Color(1, 0.0470588, 0.0666667, 0.658824)
+position = Vector2(75, 75)
+texture = ExtResource("1_e51ib")

@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://k8lh5555bjh2"]
+
+[ext_resource type="Shader" path="res://Shaders/colorcycle.gdshader" id="1_gbw6e"]
+
+[resource]
+shader = ExtResource("1_gbw6e")
+shader_parameter/start_frame = 0
+shader_parameter/current_frame = 7
+shader_parameter/mix_ratio = 1.0

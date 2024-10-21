@@ -1,0 +1,62 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[addons]
+
+resources_spreadsheet_view/array_color_tint=100.0
+resources_spreadsheet_view/color_rows=true
+resources_spreadsheet_view/array_min_width=128.0
+resources_spreadsheet_view/resource_preview_size=32.0
+resources_spreadsheet_view/clip_headers=false
+resources_spreadsheet_view/dupe_arrays=true
+resources_spreadsheet_view/context_menu_on_leftclick=false
+resources_spreadsheet_view/fold_docks=false
+
+[application]
+
+config/name="ChessRogue11"
+run/main_scene="res://Scenes/main.tscn"
+config/features=PackedStringArray("4.3", "Mobile")
+config/icon="res://icon.svg"
+
+[autoload]
+
+Global="*res://Scripts/Global.gd"
+GlobalUtility="*res://Scripts/GlobalUtility.gd"
+Movement="*res://Scripts/Movement.gd"
+
+[display]
+
+window/size/viewport_width=1600
+window/size/viewport_height=1200
+
+[dotnet]
+
+project/assembly_name="ChessRogue11"
+
+[editor_plugins]
+
+enabled=PackedStringArray()
+
+[global_group]
+
+squares="all squares"
+pieces="all pieces"
+white="all white pieces"
+black="all black pieces"
+pieceoverlays=""
+
+[godot_resource_groups]
+
+auto_rebuild=true
+
+[rendering]
+
+environment/defaults/default_clear_color=Color(0.273873, 0.273873, 0.273873, 1)

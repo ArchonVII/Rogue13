@@ -1,0 +1,4 @@
+@export var first_move : bool
+@export var has_promoted : bool
+@export var promoted_piece : PieceList
+@export var enpassant : bool

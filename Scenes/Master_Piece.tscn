@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://2a2880xeoq5d"]
+
+[ext_resource type="Texture2D" uid="uid://v2oxi5ti176h" path="res://Images/Pieces/wp.png" id="1_cn02p"]
+[ext_resource type="Script" path="res://Resources/master_piece.gd" id="2_j0gnp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bwrrw"]
+
+[node name="PieceScene" type="Sprite2D"]
+texture = ExtResource("1_cn02p")
+centered = false
+script = ExtResource("2_j0gnp")
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(75, 75)
+scale = Vector2(7.5, 7.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_bwrrw")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2

@@ -1,0 +1,48 @@
+[gd_scene load_steps=6 format=3 uid="uid://c5if4hulgyiuw"]
+
+[ext_resource type="Script" path="res://Resources/master_square.gd" id="1_282kx"]
+[ext_resource type="Material" uid="uid://c7l26g1hud4p6" path="res://SquareMods/Square_Fire.tres" id="2_n5ytg"]
+[ext_resource type="Material" uid="uid://cwa2p6287qt7x" path="res://SquareMods/Square_Fire_Orange.tres" id="3_w21sb"]
+[ext_resource type="Material" uid="uid://66gckkhs82e1" path="res://SquareMods/Square_Fire_Yellow.tres" id="4_xer8g"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gyc51"]
+size = Vector2(75, 75)
+
+[node name="Square" type="Sprite2D"]
+scale = Vector2(2, 2)
+centered = false
+script = ExtResource("1_282kx")
+metadata/_edit_vertical_guides_ = [150.0]
+metadata/_edit_horizontal_guides_ = [150.0]
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(37.5, 37.5)
+shape = SubResource("RectangleShape2D_gyc51")
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+visible = false
+offset_right = 75.0
+offset_bottom = 75.0
+color = Color(0.391097, 0.55083, 0, 1)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Red" type="ColorRect" parent="CanvasLayer"]
+z_index = 1
+material = ExtResource("2_n5ytg")
+offset_right = 151.0
+offset_bottom = 150.0
+
+[node name="Orange" type="ColorRect" parent="CanvasLayer"]
+z_index = 2
+material = ExtResource("3_w21sb")
+offset_right = 151.0
+offset_bottom = 150.0
+
+[node name="Yellow" type="ColorRect" parent="CanvasLayer"]
+z_index = 2
+material = ExtResource("4_xer8g")
+offset_right = 150.0
+offset_bottom = 149.0

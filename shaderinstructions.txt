@@ -1,0 +1,18 @@
+trail
+
+This shader creates a noise trail.
+
+Don’t forget to change in your script the uniforms and to initialise the noise (and find the values for the noise that fit to your needs) !
+
+In your Sprite’s script (get_parent() is the player), you can add:
+
+extends Sprite
+
+
+func _ready():
+	material.set_shader_param("nb_frames",Vector2(hframes, vframes))
+
+
+func _process(delta):
+	material.set_shader_param("frame_coords",frame_coords)
+	material.set_shader_param("velocity",get_parent().velocity)

@@ -1,0 +1,23 @@
+[gd_resource type="ShaderMaterial" load_steps=5 format=3 uid="uid://cvf75orbdsr8l"]
+
+[ext_resource type="Shader" path="res://Shaders/hologram.gdshader" id="1_38pm5"]
+
+[sub_resource type="Gradient" id="Gradient_bgrsy"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_tgw0l"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_u3uqw"]
+width = 150
+height = 150
+invert = true
+color_ramp = SubResource("Gradient_bgrsy")
+noise = SubResource("FastNoiseLite_tgw0l")
+
+[resource]
+shader = ExtResource("1_38pm5")
+shader_parameter/baseColor = Vector4(0.3058, 0.835, 0.96, 1)
+shader_parameter/speed = 0.5
+shader_parameter/linesColor = Vector4(0.633232, 0.910156, 0.555693, 1)
+shader_parameter/linesColorIntensity = 5.0
+shader_parameter/hologramTextureTiling = Vector2(1, 5)
+shader_parameter/hologramTexture = SubResource("NoiseTexture2D_u3uqw")

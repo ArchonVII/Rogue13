@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://bukjobb4inmqq"]
+
+[ext_resource type="Texture2D" uid="uid://dq5rtcj4ugaqp" path="res://Images/Pieces/wb.png" id="1_ta0h5"]
+[ext_resource type="Material" uid="uid://bomysj1if10su" path="res://Shaders/crt.tres" id="2_pyq48"]
+
+[node name="testshader" type="Node2D"]
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+texture = ExtResource("1_ta0h5")
+centered = false
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+clip_children = 1
+texture = ExtResource("1_ta0h5")
+centered = false
+
+[node name="ColorRect" type="ColorRect" parent="Sprite2D"]
+material = ExtResource("2_pyq48")
+offset_right = 150.0
+offset_bottom = 150.0

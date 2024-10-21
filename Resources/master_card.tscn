@@ -1,0 +1,76 @@
+[gd_scene load_steps=13 format=3 uid="uid://jjccn6k1gq0x"]
+
+[ext_resource type="Shader" path="res://Shaders/Pieces/dissolve.gdshader" id="1_l083k"]
+[ext_resource type="Script" path="res://Scripts/Card/card.gd" id="2_fepl6"]
+[ext_resource type="Shader" path="res://Shaders/demo_card.gdshader" id="3_5d7t7"]
+[ext_resource type="Texture2D" uid="uid://chfy52jume0rg" path="res://Images/Cards/jokerjoker.png" id="4_7mt5x"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8015i"]
+render_priority = 0
+shader = ExtResource("1_l083k")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ovxka"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_onrcg"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_t42kr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kjheq"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_leo87"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g0u02"]
+resource_local_to_scene = true
+shader = ExtResource("3_5d7t7")
+shader_parameter/rect_size = Vector2(152, 207)
+shader_parameter/fov = 90.0
+shader_parameter/cull_back = true
+shader_parameter/y_rot = 4.275e-06
+shader_parameter/x_rot = 4.275e-06
+shader_parameter/inset = 0.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3fg22"]
+size = Vector2(135, 187)
+
+[node name="Card" type="Button"]
+material = SubResource("ShaderMaterial_8015i")
+custom_minimum_size = Vector2(152, 207)
+offset_right = 8.0
+offset_bottom = 8.0
+pivot_offset = Vector2(76, 103.5)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ovxka")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_onrcg")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_t42kr")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_kjheq")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_leo87")
+script = ExtResource("2_fepl6")
+
+[node name="CardTexture" type="TextureRect" parent="."]
+modulate = Color(0, 0, 0, 1)
+material = SubResource("ShaderMaterial_g0u02")
+layout_mode = 0
+offset_right = 152.0
+offset_bottom = 207.0
+texture = ExtResource("4_7mt5x")
+expand_mode = 1
+
+[node name="Shadow" type="TextureRect" parent="."]
+modulate = Color(0, 0, 0, 1)
+self_modulate = Color(1, 1, 1, 0)
+show_behind_parent = true
+layout_mode = 1
+offset_top = 24.0
+offset_right = 152.0
+offset_bottom = 231.0
+texture = ExtResource("4_7mt5x")
+
+[node name="DestroyArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DestroyArea"]
+position = Vector2(76.5, 102.5)
+shape = SubResource("RectangleShape2D_3fg22")
+disabled = true
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

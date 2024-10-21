@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cact87f0bfaxe"]
+
+[ext_resource type="Shader" path="res://Shaders/teleport.gdshader" id="1_u2qti"]
+
+[resource]
+shader = ExtResource("1_u2qti")
+shader_parameter/progress = null
+shader_parameter/noise_desnity = 60.0
+shader_parameter/beam_size = null
+shader_parameter/color = Vector4(0, 1.02, 1.2, 1)

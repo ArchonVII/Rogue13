@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://43msg87lgpcq"]
+
+[ext_resource type="Script" path="res://Scripts/Card/card.gd" id="1_5mdej"]
+[ext_resource type="Material" uid="uid://dlpldvfneni8" path="res://Shaders/3d-card-shader.tres" id="1_uf32v"]
+[ext_resource type="Texture2D" uid="uid://dst3klsy6hnef" path="res://Images/Cards/Tiles_A_white.png" id="2_t4lp2"]
+
+[node name="Control" type="Button"]
+custom_minimum_size = Vector2(152, 207)
+offset_right = 152.0
+offset_bottom = 207.0
+pivot_offset = Vector2(76, 103.5)
+script = ExtResource("1_5mdej")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+material = ExtResource("1_uf32v")
+layout_mode = 0
+offset_right = 152.0
+offset_bottom = 207.0
+texture = ExtResource("2_t4lp2")
+expand_mode = 1

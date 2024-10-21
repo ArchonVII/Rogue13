@@ -1,0 +1,8 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://cwf0ahl3tl1v0"]
+
+[sub_resource type="SystemFont" id="SystemFont_m6dr2"]
+font_names = PackedStringArray("Segoe UI")
+
+[resource]
+font = SubResource("SystemFont_m6dr2")
+font_size = 15

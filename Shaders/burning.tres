@@ -1,0 +1,26 @@
+[gd_resource type="ShaderMaterial" load_steps=5 format=3 uid="uid://bcbonew1s6k10"]
+
+[ext_resource type="Shader" path="res://Shaders/burn.gdshader" id="1_7ihlr"]
+
+[sub_resource type="Gradient" id="Gradient_aqhyi"]
+offsets = PackedFloat32Array(0, 0.340058, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.796078, 0.113725, 0.0745098, 1, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_y0mng"]
+noise_type = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_alpn3"]
+width = 150
+height = 150
+invert = true
+color_ramp = SubResource("Gradient_aqhyi")
+noise = SubResource("FastNoiseLite_y0mng")
+
+[resource]
+shader = ExtResource("1_7ihlr")
+shader_parameter/progress = 0.0
+shader_parameter/width = 0.2
+shader_parameter/timed = true
+shader_parameter/speed = 1.0
+shader_parameter/angle = 1.0
+shader_parameter/noise = SubResource("NoiseTexture2D_alpn3")
