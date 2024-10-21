@@ -86,7 +86,7 @@ var black_in_check = false
 var selected_piece = null
 
 # global restrictions
-@export var free_movement = false
+@export var free_movement = true
 @export var free_turn = true
 @export var turn_color_is = "white"
 

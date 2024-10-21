@@ -171,3 +171,16 @@ func second():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _mask_update():
 #endregion
+
+
+func _on_free_movement_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		Global.free_movement = true
+	else:
+		Global.free_movement = false
+
+func _on_turn_restriction_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		Global.free_turn = true
+	else:
+		Global.free_turn = false

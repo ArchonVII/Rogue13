@@ -20,24 +20,24 @@ func _ready() -> void:
 func _on_square_clicked(viewport, event, shape_idx, square):
 
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and !event.pressed:
-		print("square input 1 test: square click")
+		#print("square input 1 test: square click")
 		pass
 
 	# share that this is the origin square for a potential piece movement as the piece is being dragged by the user
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		print("square input 2 test: square click to start dragging piece")
+		#print("square input 2 test: square click to start dragging piece")
 		Global.pickedup_square = square
 
 	# share that this is the square a piece was placed on
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_released:
-		if Global.dragged_piece != null:
-			print("square input 3 test: square click after dropping a dragged piece")
-		else:
-			print("square input 3 test: square click after")
+		#if Global.dragged_piece != null:
+			#print("square input 3 test: square click after dropping a dragged piece")
+		#else:
+			#print("square input 3 test: square click after")
 		Global.dropped_square = square.data.index
 
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
-		print("square input 4 test: square right click")
+		#print("square input 4 test: square right click")
 		pass
 
 func _on_square_hovered(square):

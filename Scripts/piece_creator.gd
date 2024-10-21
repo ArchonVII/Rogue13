@@ -94,14 +94,6 @@ func _process(delta):
 		# HACK changed mouse position
 		dragged_piece.position = get_global_mouse_position() - Vector2(offset, offset)
 
-		var area2d = dragged_piece.get_node("Area2D")
-		var overlapping_areas = area2d.get_overlapping_areas()
-
-		for area in overlapping_areas:
-			if area.is_in_group("squares"):  # Check if the area is a chess square
-				print("Piece is over a square")
-			if area.is_in_group("pieces"):
-				print("Piece is over a piece")
 
 
 
@@ -109,57 +101,32 @@ func _on_piece_clicked(viewport, event, shape_idx, piece):
 
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:					# if the piece is clicked
 		Global.selected_piece = piece # for effect usage
+		var return_square = Global.pickedup_square
+		if event.pressed and not is_dragging:			# and you're not currently dragging a piece
+			is_dragging = true							# Start dragging
+			dragged_piece = piece 						# set global
+			emit_signal("piece_index_label", piece)
+			find_moves(dragged_piece)
 
-		if Global.free_turn == true or (Global.free_turn == false and piece.data.color == Global.turn_color_is):
-			var return_square = Global.pickedup_square
-			if event.pressed and not is_dragging:			# and you're not currently dragging a piece
-				is_dragging = true							# Start dragging
-				dragged_piece = piece 						# set global
-				#check_legal_moves(dragged_piece) 			# get the pieces legal moves
-				emit_signal("piece_index_label", piece)
-				find_moves(dragged_piece)
-				# BISHOP TEST
-				if dragged_piece.data.ptype == 2:
-					get_bishop_moves(piece)
+		elif not event.pressed and is_dragging:			# if the mouse is let go after dragging
+			is_dragging = false							# Stop dragging
+			var target_square= Global.hovered_square
 
-				if dragged_piece.data.ptype == 3:
-					var empty = []
-					get_rook_moves(piece, empty)
+			if Global.free_movement:	#if free moveoment, do whatever
+				print("total movement was free")
+				#setup_move(dragged_piece, target_square, return_square)
+				index_snap_to(dragged_piece, target_square, "move")
 
-				if dragged_piece.data.ptype == 1:
-					get_knight_moves(piece)
-
-				if dragged_piece.data.ptype == 0:
-					get_pawn_moves(piece)
-
-				if dragged_piece.data.ptype == 4:
-					get_bishop_moves(piece)
-
-				if dragged_piece.data.ptype == 5:
-					get_king_moves(piece)
-
-			elif not event.pressed and is_dragging:			# if the mouse is let go after dragging
-				is_dragging = false							# Stop dragging
-				var target_square= Global.hovered_square
-
-				if Global.free_movement:
-					index_snap_to(dragged_piece, target_square, "move")
-
-				elif piece.data.moves_empty.has(target_square.data.index):
-					index_snap_to(dragged_piece, target_square, "move")
-					if piece.data.moves_attack.has(target_square.data.index):
-						index_snap_to(dragged_piece, target_square, "capture")
-						# PIECE CAPTURED
-				else:
-					print("target_square ", target_square, " return square ", return_square)
+			if !Global.free_movement:	# if movement is not free, check for turn restrictions
+				if Global.free_turn: # if moves are not restricted by color turn
+					setup_move(dragged_piece, target_square, return_square)
+				elif dragged_piece.data.color != Global.turn_color_is: # if the piece is the wrong color
 					index_snap_to(dragged_piece, return_square, "return")
-					dragged_piece = null
-					reset_dragged_piece(piece)
-					emit_signal("clear_overlay")
+				else:
+					setup_move(dragged_piece, target_square, return_square)
+					return
 
-
-				#index_snap_to(dragged_piece, target_square)
-				dragged_piece = null
+			dragged_piece = null
 
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_MIDDLE:
 			if event.pressed:
@@ -172,39 +139,55 @@ func _on_piece_clicked(viewport, event, shape_idx, piece):
 
 func find_moves(piece):
 
-	if piece.data.ptype == 2:
+	match piece.data.type:
+		2:
 			get_bishop_moves(piece)
 
-	if piece.data.ptype == 3:
-		var empty = []
-		get_rook_moves(piece, empty)
+		3:
+			var empty = []
+			get_rook_moves(piece, empty)
 
-	if piece.data.ptype == 1:
-		get_knight_moves(piece)
+		1:
+			get_knight_moves(piece)
 
-	if piece.data.ptype == 0:
-		get_pawn_moves(piece)
+		0:
+			get_pawn_moves(piece)
 
-	if piece.data.ptype == 4:
-		get_bishop_moves(piece)
+		4:
+			get_bishop_moves(piece)
 
-	if piece.data.ptype == 5:
-		get_king_moves(piece)
+		5:
+			get_king_moves(piece)
 
+func setup_move(piece, target_square, return_square):
+
+	if piece.data.moves_empty.has(target_square.data.index):
+		index_snap_to(dragged_piece, target_square, "move")
+		if piece.data.moves_attack.has(target_square.data.index):
+			index_snap_to(dragged_piece, target_square, "capture")
+			# PIECE CAPTURED
+	else:
+		print("target_square ", target_square, " return square ", return_square)
+		index_snap_to(dragged_piece, return_square, "return")
+		dragged_piece = null
+		reset_dragged_piece(piece)
+		emit_signal("clear_overlay")
+
+	#index_snap_to(piece, target_square, "move")
 
 
 
 func index_snap_to(piece, square, movetype):
 
-	var check_check = will_my_king_be_in_check(piece)
-	print("check check: ", check_check, " piece thinks it is on ", piece.data.index)
-	if !check_check:
-		piece.position = square.position
-	else:
-		print("Move would place king in check")
-		return
+	#var check_check = will_my_king_be_in_check(piece)
+	#print("check check: ", check_check, " piece thinks it is on ", piece.data.index)
+	#if !check_check:
+	piece.position = square.position
+	#else:
+		#print("Move would place king in check")
+		#return
 
-	print("piece total moves: ", piece.data.total_moves)
+	#print("piece total moves: ", piece.data.total_moves)
 	# sound
 	play_sound("move_self")
 
@@ -216,8 +199,9 @@ func index_snap_to(piece, square, movetype):
 		emit_signal("update_turn")
 		update_moves(piece)
 	else:
-
 		emit_signal("clear_overlay")
+
+	reset_dragged_piece(piece)
 
 func will_my_king_be_in_check(piece):
 
