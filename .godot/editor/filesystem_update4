@@ -39,3 +39,4 @@ res://Shaders/crt_2.tres
 res://Scripts/main.gd
 res://Scripts/piece_creator.gd
 res://Scripts/overlay.gd
+res://Scripts/piece_resource.gd

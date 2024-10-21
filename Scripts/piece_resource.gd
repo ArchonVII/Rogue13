@@ -10,6 +10,7 @@ enum CheckStatus { NONE, CHECKED, CHECKING, PINNED, PINNING }
 
 # index based variables
 @export var index : int
+@export var old_index : int
 @export var row : int
 @export var col : int
 

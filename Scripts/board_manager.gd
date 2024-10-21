@@ -43,13 +43,13 @@ func _on_square_clicked(viewport, event, shape_idx, square):
 func _on_square_hovered(square):
 	emit_signal("square_index_label", square)
 
-func _on_area_entered(area):
-	var parent_piece = area.get_parent()
+#func _on_area_entered(area):
+	#var parent_piece = area.get_parent()
 	#if parent_piece.is_in_group("pieces"):  # Assuming pieces are in a "chess_pieces" group
 		#print("Piece entered the square!")
 
-func _on_area_exited(area):
-	pass
+#func _on_area_exited(area):
+	#pass
 	#if area.is_in_group("pieces"):
 		#print("Piece exited the square!")
 
@@ -101,8 +101,8 @@ func create_square():
 				j.connect("mouse_entered", Callable(self, "_on_square_hovered").bind(square_instance))
 				j.connect("mouse_exited", Callable(self, "_on_piece_unhovered").bind(square_instance))
 
-				j.connect("area_entered", Callable(self, "_on_area_entered").bind(square_instance))
-				j.connect("area_exited", Callable(self, "_on_area_exited").bind(square_instance))
+				#j.connect("area_entered", Callable(self, "_on_area_entered").bind(square_instance))
+				#j.connect("area_exited", Callable(self, "_on_area_exited").bind(square_instance))
 
 		square_instance.add_to_group("squares")
 		add_child(square_instance)

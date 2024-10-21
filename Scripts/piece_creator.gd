@@ -101,12 +101,18 @@ func _on_piece_clicked(viewport, event, shape_idx, piece):
 
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:					# if the piece is clicked
 		Global.selected_piece = piece # for effect usage
+
 		var return_square = Global.pickedup_square
-		if event.pressed and not is_dragging:			# and you're not currently dragging a piece
+		if event.pressed and not is_dragging:
+			review_board_state()			# and you're not currently dragging a piece
 			is_dragging = true							# Start dragging
 			dragged_piece = piece 						# set global
+
+			reset_piece_moves(dragged_piece)
+			update_moves(dragged_piece)
 			emit_signal("piece_index_label", piece)
 			find_moves(dragged_piece)
+
 
 		elif not event.pressed and is_dragging:			# if the mouse is let go after dragging
 			is_dragging = false							# Stop dragging
@@ -153,7 +159,27 @@ func find_moves(piece):
 		5:
 			get_king_moves(piece)
 
+func reset_piece_moves(piece):
+	piece.data.moves_empty = []
+	piece.data.moves_attack = []
+	piece.data.moves_defend = []
+
+func review_board_state():
+
+	var black = get_tree().get_nodes_in_group("black")
+	var white = get_tree().get_nodes_in_group("white")
+	var combine = [black, white]
+
+	for color in combine:
+		for piece in color:
+			prints(piece.data.index, piece.data.name, piece.data.moves_empty, piece.data.moves_attack, piece.data.moves_defend)
+
 func setup_move(piece, target_square, return_square):
+
+	print("REVIEW BOARD STATE \n")
+
+
+	# checks, check
 	if piece.data.moves_empty.has(target_square.data.index):
 		index_snap_to(dragged_piece, target_square, "move")
 		if piece.data.moves_attack.has(target_square.data.index):
@@ -166,21 +192,62 @@ func setup_move(piece, target_square, return_square):
 		emit_signal("clear_overlay")
 
 func index_snap_to(piece, square, movetype):
-	piece.position = square.position
+
+	#var look = _king_check(pi)
+	#print("INDEX SNAP TO BOARD STATE \n")
+	review_board_state()
 	# sound
 	play_sound("move_self")
 
 	# world update
-	reset_dragged_piece(piece)
+
 
 	if movetype != "return":
+		var old = piece.data.index
+		piece.data.old_index = old
+		piece.position = square.position
+		piece.data.index = square.data.index
 		emit_signal("piece_placed", piece, square)
 		emit_signal("update_turn")
-		update_moves(piece)
+
 	else:
 		emit_signal("clear_overlay")
 
+	update_moves(piece)
 	reset_dragged_piece(piece)
+
+func _king_check(color, enemy):
+	var nearby = []
+	var key = "%s_king_index" % color
+	var move_key = "move_%s" % enemy
+	var attack_key = "attack_%s" % enemy
+	var king = Global.get(key)
+	var danger_moves = Global.get(move_key)
+	var attack_moves = Global.get(attack_key)
+	var vuln_squares = Global.move_map[color]
+	var restricted_squares = []
+
+	#print("checking the ", color, " king.  At index ", king)
+	#print("king index: ", king, " - ", Global.white_king_index)
+	#print("Danger moves for black: ", danger_moves)
+	for move in Movement.king:
+		var square = king + move
+		#print("square to evaluate for future check: ", square)
+		if square > -1 or square < 64:
+			if danger_moves.has(square):
+				restricted_squares.append(square);
+
+	if attack_moves.has(king):
+		print("KING IS IN CHECK")
+
+
+
+
+	#print("King check white: ", restricted_squares)
+
+	return restricted_squares
+
+
 
 func will_my_king_be_in_check(piece):
 
@@ -436,6 +503,8 @@ func get_pawn_moves(piece):
 	var moves = []
 	var index = piece.data.index
 
+	print("PAWN MOVES: checking global black index: \n", Global.black_index)
+
 	# ADD EN PASSANT ATTACK
 	if piece.data.color == "white":
 		var move1 = piece.data.index + Movement.N
@@ -496,7 +565,7 @@ func get_pawn_moves(piece):
 	emit_signal("display_empty_moves", piece, _moves)
 	emit_signal("display_attack_moves", piece, _attacks)
 	emit_signal("display_defended_squares", piece, _friends)
-	pawn_blockers(piece, moves)
+	#pawn_blockers(piece, moves)
 	return moves
 
 func is_within_movsquare(index, move):
@@ -678,7 +747,7 @@ func find_blockers(piece, moves):
 
 
 func update_moves(piece):
-
+	printt("should be empty: ", piece.data.moves_empty, piece.data.moves_attack, piece.data.moves_defend)
 	match piece.data.ptype:
 		0:
 			get_pawn_moves(piece)
@@ -699,7 +768,7 @@ func update_moves(piece):
 
 	for child in overlay.get_children():
 		overlay.remove_child(child)
-
+	printt("should be updated: ", piece.data.moves_empty, piece.data.moves_attack, piece.data.moves_defend)
 
 func find_my_checks(color):
 
@@ -783,54 +852,10 @@ func movement_bus(members):
 				var king = find_blockers(member, _king)
 				all_moves.append(king)
 
-
-	#flat = all_moves.flatten()
-	#unique_moves = flat.unique()
 	return all_moves
 
 
-func snap_to_nearest_square(piece):
-	#print("before: ", piece.data.index)
-	var nearest_data = find_nearest_square(piece)
-	var _position = nearest_data[0]
-	var _square_name = nearest_data[1]
 
-
-	if _square_name != "":
-		#FIXME needs better
-		piece.position = _position
-
-		## If the piece is placed in a different square
-		if piece.position != dragged_piece_origin_coordinate:		#ALERT old code, rewrite with instances
-
-			#print("before error: ", piece, "  ", piece.data.index, " - ", Global.pickedup_square, " - ", " dropped square: ", Global.dropped_square)
-			Global.pickedup_square = piece.data.index
-			piece.data.index = Global.dropped_square
-			#print("after: ", piece.data.index)
-			Global.update_piece_mask()
-
-
-			## flag en passant if applicable
-			if piece.data.type == 0:
-				if piece.data.total_moves == 0:
-					var distance_moved = abs(dragged_piece_origin_coordinate.y - piece.position.y)
-					if distance_moved == Global.board_size * 2:
-						piece.data.enpassant = true
-						print("FLAG - vulnerable to en passant = true \n")
-						piece.data.total_moves += 1
-				elif piece.data.total_moves > 0:
-					piece.data.enpassant = false
-					print("FLAG - vulnerable to en passant = false \n")
-
-			#HACK make sure this works as intended
-			piece.data.total_moves += 1
-
-			# UPDATE BOARD STATE
-
-
-	play_sound("move_self")
-	reset_dragged_piece(piece)
-	emit_signal("mask_update")
 
 #region starting board
 func set_starting_board():
@@ -876,53 +901,17 @@ func set_starting_board():
 
 func play_sound(type: String):
 	match type:
-
 		"move_self": sound_move_self.play()
 		"capture": sound_capture.play()
 		"click": sound_click.play()
 
-func find_nearest_square(piece):
-	var piece_position = piece.position
-	var nearest_square_name = ""
-	var nearest_distance = INF
-	var nearest_position = Vector2()
-
-	for square_name in GlobalUtility.dict_square_position.keys():
-		var square_position = GlobalUtility.dict_square_position[square_name]
-		var distance = piece_position.distance_to(square_position)
-
-		if distance < nearest_distance:
-			nearest_distance = distance
-			nearest_square_name = square_name
-			nearest_position = square_position
-
-	emit_signal("set_target_square", nearest_position)
-	return [nearest_position, nearest_square_name]
-
 #endregion
 
-func get_piece_moves(piece, position):
-	pass
 
-#region bit
-func check_legal_moves(piece):
 
-	var _index = piece.data.index
-
-	Global.create_attack_array(piece)
-
-	if piece.data.ptype == 0:
-		if piece.data.color == "white":
-
-			# grab it's index data
-			var _row = piece.data.row
-			var _col = piece.data.col
-			var searchrow = piece.data.row - 1
-#endregion
 
 #region creation
 func create_piece(type: String, color: String, pos: Vector2):
-
 	# type: the name of the piece
 	# color: the name of the color
 	# pos: Vector2 of board location
@@ -987,39 +976,7 @@ func _on_area_entered(area):
 
 #endregion
 
-
-func get_bishop_moves_old(piece):
-	var moves = []
-	var rank = piece.data.row
-	var file = piece.data.col
-	var index = piece.data.index
-	var bishop_moves = [ 7, 9, 14, 18, 21, 27, 28, 35, 36, 42, 45, 54, 56, 63]
-
-	for move in bishop_moves:
-		var next_index = index + move
-		if is_valid_move(index, next_index):
-			moves.append(next_index)
-
-		next_index = index - move
-		if is_valid_move(index, next_index):
-			moves.append(next_index)
-
-	emit_signal("show_overlay", piece, moves)
-	#print("bishop 1 moves: ", moves)
-	return moves
-
-func is_valid_move(start_index: int, target_index: int) -> bool:
-
-	if target_index < 0 or target_index > 63:
-		return false
-
-	var start_rank = start_index / 8
-	var start_file = start_index % 8
-	var target_rank = target_index / 8
-	var target_file = target_index % 8
-
-	return abs(start_rank - target_rank) == abs(start_file - target_file)
-
+#region buttons
 func _on_button_toggled(toggled_on: bool):
 	var members = get_tree().get_nodes_in_group("black")
 	Global.move_black = []
@@ -1068,3 +1025,4 @@ func _on_vibrate_pressed():
 				child.custom_minimum_size = Vector2(150, 150)
 				child.MOUSE_FILTER_IGNORE
 				child.material = vibrate_shader
+#endregion

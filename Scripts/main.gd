@@ -20,6 +20,8 @@ func _ready():
 	$Pieces.connect("piece_placed", Callable(self, "_piece_placed"))
 	$Pieces.connect("update_turn", Callable(self, "_update_turn"))
 
+
+
 	# Initalize starting moves
 	for child in pieces.get_children():
 
@@ -57,12 +59,15 @@ func _update_Sindex(square):
 func _piece_placed(piece, square):
 
 	var new_index = square.data.index
-	var old_index = piece.data.index
+	var old_index = piece.data.old_index
 
 	# update occupied and empty array
-	Global.occupied_index.erase(old_index)
+	var erase = Global.occupied_index.find(old_index)
+	Global.occupied_index.remove_at(erase)
 	Global.occupied_index.append(new_index)
-	Global.empty_index.erase(new_index)
+
+	var erase2 = Global.empty_index.find(new_index)
+	Global.empty_index.remove_at(erase2)
 	Global.empty_index.append(old_index)
 
 	# update piece array
@@ -82,6 +87,9 @@ func _piece_placed(piece, square):
 	piece.data.row = new_index / 8
 	piece.data.col = new_index % 8
 	piece.data.legal_moves = []
+	$Pieces.update_moves(piece)
+
+
 
 	var movecheck = Global.pickedup_square
 	if piece.data.index != movecheck.data.index:
@@ -181,7 +189,7 @@ func second():
 #func _mask_update():
 #endregion
 
-
+#region buttons
 func _on_free_movement_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		Global.free_movement = true
@@ -193,3 +201,4 @@ func _on_turn_restriction_toggled(toggled_on: bool) -> void:
 		Global.free_turn = true
 	else:
 		Global.free_turn = false
+#endregion
