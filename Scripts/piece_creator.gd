@@ -138,56 +138,35 @@ func _on_piece_clicked(viewport, event, shape_idx, piece):
 					_create_tooltip(piece)
 
 func find_moves(piece):
-
-	match piece.data.type:
+	match piece.data.ptype:
 		2:
 			get_bishop_moves(piece)
-
 		3:
 			var empty = []
 			get_rook_moves(piece, empty)
-
 		1:
 			get_knight_moves(piece)
-
 		0:
 			get_pawn_moves(piece)
-
 		4:
 			get_bishop_moves(piece)
-
 		5:
 			get_king_moves(piece)
 
 func setup_move(piece, target_square, return_square):
-
 	if piece.data.moves_empty.has(target_square.data.index):
 		index_snap_to(dragged_piece, target_square, "move")
 		if piece.data.moves_attack.has(target_square.data.index):
 			index_snap_to(dragged_piece, target_square, "capture")
 			# PIECE CAPTURED
 	else:
-		print("target_square ", target_square, " return square ", return_square)
 		index_snap_to(dragged_piece, return_square, "return")
 		dragged_piece = null
 		reset_dragged_piece(piece)
 		emit_signal("clear_overlay")
 
-	#index_snap_to(piece, target_square, "move")
-
-
-
 func index_snap_to(piece, square, movetype):
-
-	#var check_check = will_my_king_be_in_check(piece)
-	#print("check check: ", check_check, " piece thinks it is on ", piece.data.index)
-	#if !check_check:
 	piece.position = square.position
-	#else:
-		#print("Move would place king in check")
-		#return
-
-	#print("piece total moves: ", piece.data.total_moves)
 	# sound
 	play_sound("move_self")
 
@@ -292,7 +271,6 @@ func get_bishop_moves(piece):
 
 	slide_blockers(piece, moves)
 	return moves
-
 
 func slide_blockers(piece, moves):
 	var _attacks = []
@@ -766,14 +744,11 @@ func find_my_checks(color):
 
 #region utility
 
-
-
 func reset_dragged_piece(piece):
 	dragged_piece_move_list = null
 	dragged_piece_origin_coordinate = null
 	dragged_piece_moves_checked = null
 	dragged_piece = null
-
 
 # help for grabbing all moves
 func movement_bus(members):
@@ -813,24 +788,6 @@ func movement_bus(members):
 	#unique_moves = flat.unique()
 	return all_moves
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-func snap_to_square(piece, square):
-	#print("snap to square")
-	piece.position = square
-	reset_dragged_piece(piece)
 
 func snap_to_nearest_square(piece):
 	#print("before: ", piece.data.index)

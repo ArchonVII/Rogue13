@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://cyelmmna8w8kx"]
+[gd_scene load_steps=18 format=3 uid="uid://cyelmmna8w8kx"]
 
 [ext_resource type="PackedScene" uid="uid://c5mjlw3q7b5hc" path="res://Scenes/board.tscn" id="1_4fud4"]
 [ext_resource type="Script" path="res://Scripts/main.gd" id="1_gkm27"]
@@ -10,29 +10,26 @@
 [ext_resource type="AudioStream" uid="uid://cv3ki7bssxmfr" path="res://Audio/capture.mp3" id="7_wvpun"]
 [ext_resource type="AudioStream" uid="uid://brex314xgpkep" path="res://Audio/click.mp3" id="8_ekvrr"]
 [ext_resource type="Texture2D" uid="uid://cxndm1yfia48q" path="res://Images/Pieces/wk.png" id="10_r0d6t"]
+[ext_resource type="Theme" uid="uid://bhpgkbmfbdcqg" path="res://Themes/black_turn_label.tres" id="11_b2ar8"]
 [ext_resource type="Texture2D" uid="uid://bbvb0saaucgbe" path="res://Images/Pieces/bk.png" id="11_ygvsp"]
+[ext_resource type="Theme" uid="uid://dme0ouyllngy3" path="res://Themes/dark_bg_label.tres" id="12_88yax"]
+
+[sub_resource type="Theme" id="Theme_0l35k"]
+default_font_size = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_podh8"]
+bg_color = Color(0.00566115, 0.00566117, 0.00566107, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7fqul"]
+content_margin_right = 200.0
+bg_color = Color(0.336608, 0.336608, 0.336608, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8xm40"]
+content_margin_right = 75.0
+bg_color = Color(0.205117, 0.205117, 0.205117, 1)
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_gkm27")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-top_level = true
-custom_minimum_size = Vector2(150, 150)
-offset_left = 1202.0
-offset_top = 6.0
-offset_right = 1374.0
-offset_bottom = 156.0
-
-[node name="FreeMovement" type="CheckButton" parent="VBoxContainer"]
-layout_mode = 2
-button_pressed = true
-text = "Free Movement"
-
-[node name="Turn Restriction" type="CheckButton" parent="VBoxContainer"]
-layout_mode = 2
-button_pressed = true
-text = "Free Turn
-"
 
 [node name="Tooltips" type="Node2D" parent="."]
 z_index = 2
@@ -76,21 +73,27 @@ offset_right = 1763.0
 offset_bottom = 403.0
 alignment = 1
 
-[node name="Index_Piece" type="Label" parent="."]
-offset_left = 10.0
-offset_top = -36.0
-offset_right = 107.0
-offset_bottom = -13.0
-text = "Piece Index: "
+[node name="Restrictions" type="VBoxContainer" parent="."]
+top_level = true
+custom_minimum_size = Vector2(150, 150)
+offset_left = 1732.0
+offset_top = 9.0
+offset_right = 1904.0
+offset_bottom = 159.0
 
-[node name="Index_Square" type="Label" parent="."]
-offset_left = 200.0
-offset_top = -37.0
-offset_right = 306.0
-offset_bottom = -14.0
-text = "Square Index:"
+[node name="FreeMovement" type="CheckButton" parent="Restrictions"]
+layout_mode = 2
+button_pressed = true
+text = "Free Movement"
+
+[node name="Turn Restriction" type="CheckButton" parent="Restrictions"]
+layout_mode = 2
+button_pressed = true
+text = "Free Turn
+"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="."]
+visible = false
 offset_left = 1426.0
 offset_top = 8.0
 offset_right = 1722.0
@@ -119,10 +122,10 @@ layout_mode = 2
 text = "Clear Overlay"
 
 [node name="VBoxContainer3" type="VBoxContainer" parent="."]
-offset_left = 1439.0
-offset_top = 447.0
-offset_right = 1479.0
-offset_bottom = 487.0
+offset_left = 26.0
+offset_top = 1241.0
+offset_right = 136.0
+offset_bottom = 1307.0
 
 [node name="Pixelate" type="CheckButton" parent="VBoxContainer3"]
 layout_mode = 2
@@ -132,15 +135,86 @@ text = "Pixelate"
 layout_mode = 2
 text = "Vibrate"
 
-[node name="Turn" type="Label" parent="."]
-offset_left = 9.0
-offset_top = -73.0
-offset_right = 55.0
-offset_bottom = -50.0
-text = "White"
+[node name="GameData" type="VBoxContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
 
-[connection signal="toggled" from="VBoxContainer/FreeMovement" to="." method="_on_free_movement_toggled"]
-[connection signal="toggled" from="VBoxContainer/Turn Restriction" to="." method="_on_turn_restriction_toggled"]
+[node name="TurnNum" type="Label" parent="GameData"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GameData"]
+layout_mode = 2
+
+[node name="WhiteMoves" type="VBoxContainer" parent="GameData/HBoxContainer"]
+layout_mode = 2
+
+[node name="BlackMoves" type="VBoxContainer" parent="GameData/HBoxContainer"]
+layout_mode = 2
+
+[node name="Container" type="Panel" parent="."]
+clip_contents = true
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = 1259.0
+offset_top = 5.0
+offset_right = 1587.0
+offset_bottom = 425.0
+grow_horizontal = 0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Container"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 1
+offset_left = -14.0
+offset_top = 3.0
+offset_right = 316.0
+offset_bottom = 423.0
+mouse_filter = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="DevData" type="VBoxContainer" parent="Container/MarginContainer"]
+z_index = 1
+custom_minimum_size = Vector2(500, 50)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme = SubResource("Theme_0l35k")
+theme_override_constants/separation = 0
+
+[node name="Turn" type="Label" parent="Container/MarginContainer/DevData"]
+layout_mode = 2
+theme = ExtResource("11_b2ar8")
+theme_override_colors/font_color = Color(0.99558, 0.99558, 0.99558, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_podh8")
+text = "White"
+vertical_alignment = 1
+
+[node name="Index_Square" type="RichTextLabel" parent="Container/MarginContainer/DevData"]
+custom_minimum_size = Vector2(300, 25)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_7fqul")
+text = "Square:
+"
+fit_content = true
+autowrap_mode = 0
+tab_size = 2
+text_direction = 1
+
+[node name="Index_Piece" type="Label" parent="Container/MarginContainer/DevData"]
+layout_mode = 2
+theme = ExtResource("12_88yax")
+theme_override_styles/normal = SubResource("StyleBoxFlat_8xm40")
+text = "Piece Index: "
+
+[connection signal="toggled" from="Restrictions/FreeMovement" to="." method="_on_free_movement_toggled"]
+[connection signal="toggled" from="Restrictions/Turn Restriction" to="." method="_on_turn_restriction_toggled"]
 [connection signal="toggled" from="VBoxContainer2/Button" to="Pieces" method="_on_button_toggled"]
 [connection signal="toggled" from="VBoxContainer2/Button2" to="Pieces" method="_on_button_2_toggled"]
 [connection signal="pressed" from="VBoxContainer2/Button3" to="Overlay" method="_on_button_3_pressed"]

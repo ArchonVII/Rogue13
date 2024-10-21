@@ -122,8 +122,7 @@ func display_defended_squares(piece, moves):
 		var _overlay = create_overlay_rect("blue", _position)
 		_overlay.position = _position
 		add_child(_overlay)
-
-	draw_arrow(piece, _position, "blue")
+		draw_arrow(piece, _position, "blue")
 
 	if piece_color == "white":
 		for move in moves:

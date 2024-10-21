@@ -5,6 +5,8 @@ extends Node2D
 @onready var overlay = $Overlay
 @onready var pieces = $Pieces
 
+@onready var whiteturntheme = "res://Themes/white_turn_label.tres"
+@onready var blackturntheme = "res://Themes/black_turn_label.tres"
 var label_nodes = []
 
 signal update_moves
@@ -45,11 +47,11 @@ func _ready():
 
 
 func _update_Pindex(piece):
-	$Index_Piece.text = "Piece Index: " + str(piece.data.index)
+	$Container/MarginContainer/DevData/Index_Piece.text = "Piece Index: " + str(piece.data.index)
 	Global.pickedup_piece = piece
 
 func _update_Sindex(square):
-	$Index_Square.text = "Square Index: " + str(square.data.index)
+	$Container/MarginContainer/DevData/Index_Square.text = "Square Index: " + str(square.data.index)
 	Global.hovered_square = square
 
 func _piece_placed(piece, square):
@@ -99,10 +101,17 @@ func _piece_placed(piece, square):
 func _update_turn():
 	if Global.turn_color_is == "white":
 		Global.turn_color_is = "black"
-		$Turn.text = "Black"
+		$Container/MarginContainer/DevData/Turn.text = "Turn: Black"
+
 	else:
 		Global.turn_color_is = "white"
-		$Turn.text = "White"
+		$Container/MarginContainer/DevData/Turn.text = "Turn: White"
+
+
+	update_move_count()
+
+func update_move_count():
+	$GameData/TurnNum.text = "Move: 0"
 
 #region bitmask
 func create_mask_labels():
