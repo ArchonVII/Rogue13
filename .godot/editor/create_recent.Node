@@ -1,3 +1,4 @@
+Label
 TileMapLayer
 CheckButton
 Sprite2D
@@ -8,7 +9,6 @@ Container
 CanvasLayer
 HBoxContainer
 NinePatchRect
-Label
 VBoxContainer
 MarginContainer
 Popup

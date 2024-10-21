@@ -88,6 +88,7 @@ var selected_piece = null
 # global restrictions
 @export var free_movement = false
 @export var free_turn = true
+@export var turn_color_is = "white"
 
 var square_coordinates = [
 	[0, 0], [150, 0], [300, 0], [450, 0], [600, 0], [750, 0], [900, 0], [1050, 0],

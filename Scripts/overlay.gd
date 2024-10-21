@@ -150,7 +150,7 @@ func king_check(color, enemy):
 	var vuln_squares = Global.move_map[color]
 	var restricted_squares = []
 
-	print("checking the ", color, " king.  At index ", king)
+	#print("checking the ", color, " king.  At index ", king)
 	#print("king index: ", king, " - ", Global.white_king_index)
 	#print("Danger moves for black: ", danger_moves)
 	for move in Movement.king:

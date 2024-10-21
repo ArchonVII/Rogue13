@@ -5,58 +5,72 @@ class_name Piece
 enum SideColor { WHITE, BLACK }
 enum PieceList { NONE, PAWN, KNIGHT, BISHOP, ROOK, QUEEN }
 enum Unit { PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING }
-enum State { ALIVE, DEAD, ACTIVE, INACTIVE, FROZEN, SPECIAL, RARE, OVERWHELMED, MODIFIED }
+#enum State { ALIVE, DEAD, ACTIVE, INACTIVE, FROZEN, SPECIAL, RARE, OVERWHELMED, MODIFIED }
 enum CheckStatus { NONE, CHECKED, CHECKING, PINNED, PINNING }
 
-@export var ID : String
-@export var name : String
-@export var color : String
-@export var type : Unit
-@export var texture : Texture2D
-
-@export var ptype : int
+# index based variables
 @export var index : int
 @export var row : int
 @export var col : int
 
+# identity variables
+@export var name : String
+@export var color : String
+@export var square : String
+@export var type : Unit
+@export var ptype : int # ?
+
+# location variables
+@export var position : Vector2
+@export var previous_square : String
+@export var previous_position : Vector2
+@export var target_position : Vector2
+
+# visual based variables
+@export var ID : String
+
+# graphic variables
+@export var texture : Texture2D
+
+# move variables
+@export var total_moves = 0
+
+# move restrictions
 @export var standard_moves : Array
 @export var standard_attacks : Array
-@export var legal_moves : Array
 
+# moves on the board
 @export var all_moves : Array
 @export var moves_empty: Array
 @export var moves_defend : Array
 @export var moves_attack : Array
+@export var legal_moves : Array
+
+# interaction variables
 @export var attacked_by : Array
-@export var total_moves = 0
+@export var pinned : bool
+@export var pinned_to : Vector2
 
-
-
+# personal information
 @export var givenfirstname : String
 @export var givenlastname : String
 @export var country : String
 @export var cflag : Texture
 
 
-
-
-@export var square : String
-@export var position : Vector2
-@export var previous_square : String
-@export var previous_position : Vector2
-@export var target : Vector2
-@export var state : State
-@export var checkstatus : CheckStatus
-@export_multiline var description : String
-@export var pinned : bool
-@export var pinned_to : Vector2
+# pawn specific
 @export var first_move = true
 @export var has_promoted = false
 @export var promoted_piece : PieceList
 @export var enpassant = false
-@export var enpassant_position : Vector2
+@export var enpassant_position : int
+@export var imoves : Array
+@export var iattacks : Array
 
-
+# status variables
+@export var state : String
+@export var checkstatus : CheckStatus
+@export_multiline var description : String
 
 # textures
 @export var white_pawn_texture = preload("res://Images/Pieces/wp.png")
@@ -73,37 +87,40 @@ enum CheckStatus { NONE, CHECKED, CHECKING, PINNED, PINNING }
 @export var black_king_texture = preload("res://Images/Pieces/bk.png")
 
 
+
+
 func _init(piece_type : int, color: String, index: int):
 
-	#self.piece_type = piece_type
 	self.ptype = piece_type
 	self.color = color
 	self.index = index
-	Global.occupied_index.append(index)
 
+	# update indices
+	Global.occupied_index.append(index)
 	if color == "white":
 		Global.white_index.append(index)
 	else:
 		Global.black_index.append(index)
 
+
 	match ptype:
+
 		Unit.PAWN:
-			self.name = "Pawn"
+			self.name = "pawn"
 			if color == "white":
 				texture = white_pawn_texture
-				standard_moves = [Vector2(0,-1), Vector2(0,-2)]
-				standard_attacks = [Vector2(1,-1), Vector2(-1,-1)]
-				enpassant_position = Vector2(0,1)
-
-				# adding binary
+				imoves = [Movement.N + index, Movement.NN + index]
+				iattacks = [Movement.NW + index, Movement.NE + index]
+				enpassant_position = (Movement.S + index)
 			else:
 				texture = black_pawn_texture
-				standard_moves = [Vector2(0,1), Vector2(0,2)]
-				standard_attacks = [Vector2(1,1), Vector2(-1,1)]
-				enpassant_position = Vector2(0,-1)
+				imoves = [Movement.S + index, Movement.SS + index]
+				iattacks = [Movement.SW + index, Movement.SE + index]
+				enpassant_position = (Movement.N + index)
+
 
 		Unit.KNIGHT:
-			self.name = "Knight"
+			self.name = "knight"
 			standard_moves = [Vector2(1, 2), Vector2(1, -2), Vector2(-1, 2), Vector2(-1, -2), Vector2(2, 1), Vector2(2, -1), Vector2(-2, 1), Vector2(-2, -1)]
 			if color == "white":
 				texture = white_knight_texture
@@ -111,7 +128,7 @@ func _init(piece_type : int, color: String, index: int):
 				texture = black_knight_texture
 
 		Unit.BISHOP:
-			self.name = "Bishop"
+			self.name = "bishop"
 			standard_moves = [Vector2(1, 1), Vector2(1, -1), Vector2(-1, 1), Vector2(-1, -1)]
 			if color == "white":
 				texture = white_bishop_texture
@@ -119,7 +136,7 @@ func _init(piece_type : int, color: String, index: int):
 				texture = black_bishop_texture
 
 		Unit.ROOK:
-			self.name = "Rook"
+			self.name = "rook"
 			standard_moves = [Vector2(0, 1), Vector2(0, -1), Vector2(1, 0), Vector2(-1, 0)]
 			if color == "white":
 				texture = white_rook_texture
@@ -127,7 +144,7 @@ func _init(piece_type : int, color: String, index: int):
 				texture = black_rook_texture
 
 		Unit.QUEEN:
-			self.name = "Queen"
+			self.name = "queen"
 			standard_moves = [Vector2(0, 1), Vector2(0, -1), Vector2(1, 0), Vector2(-1, 0), Vector2(1, 1), Vector2(1, -1), Vector2(-1, 1), Vector2(-1, -1)]
 			if color == "white":
 				texture = white_queen_texture
@@ -135,7 +152,7 @@ func _init(piece_type : int, color: String, index: int):
 				texture = black_queen_texture
 
 		Unit.KING:
-			self.name = "King"
+			self.name = "king"
 			standard_moves = [Vector2(0, 1), Vector2(0, -1), Vector2(1, 0), Vector2(-1, 0), Vector2(1, 1), Vector2(1, -1), Vector2(-1, 1), Vector2(-1, -1)]
 			if color == "white":
 				Global.white_king_index = index

@@ -39,12 +39,6 @@ top_level = true
 z_index = 2
 script = ExtResource("5_60lbi")
 
-[node name="Board Manager" type="Node2D" parent="."]
-visible = false
-top_level = true
-position = Vector2(5, 2)
-script = ExtResource("3_vm1ui")
-
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(-150, -150)
 anchor_mode = 0
@@ -126,6 +120,13 @@ text = "Pixelate"
 [node name="Vibrate" type="Button" parent="VBoxContainer3"]
 layout_mode = 2
 text = "Vibrate"
+
+[node name="Turn" type="Label" parent="."]
+offset_left = 9.0
+offset_top = -73.0
+offset_right = 55.0
+offset_bottom = -50.0
+text = "White"
 
 [connection signal="toggled" from="VBoxContainer2/Button" to="Pieces" method="_on_button_toggled"]
 [connection signal="toggled" from="VBoxContainer2/Button2" to="Pieces" method="_on_button_2_toggled"]

@@ -21,7 +21,7 @@ resources_spreadsheet_view/fold_docks=false
 
 [application]
 
-config/name="ChessRogue11"
+config/name="Chess Rogue 13"
 run/main_scene="res://Scenes/main.tscn"
 config/features=PackedStringArray("4.3", "Mobile")
 config/icon="res://icon.svg"

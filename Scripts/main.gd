@@ -16,6 +16,7 @@ func _ready():
 	$Board.connect("square_index_label", Callable(self, "_update_Sindex"))
 	$Pieces.connect("set_target_square", Callable(self, "_set_target_square"))
 	$Pieces.connect("piece_placed", Callable(self, "_piece_placed"))
+	$Pieces.connect("update_turn", Callable(self, "_update_turn"))
 
 	# Initalize starting moves
 	for child in pieces.get_children():
@@ -94,6 +95,14 @@ func _piece_placed(piece, square):
 		Movement.white_moves_turn += 0.5
 	else:
 		Movement.black_moves_turn += 0.5
+
+func _update_turn():
+	if Global.turn_color_is == "white":
+		Global.turn_color_is = "black"
+		$Turn.text = "Black"
+	else:
+		Global.turn_color_is = "white"
+		$Turn.text = "White"
 
 #region bitmask
 func create_mask_labels():
