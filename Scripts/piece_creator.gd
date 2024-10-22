@@ -165,14 +165,43 @@ func reset_piece_moves(piece):
 	piece.data.moves_defend = []
 
 func review_board_state():
-
+	var color
 	var black = get_tree().get_nodes_in_group("black")
 	var white = get_tree().get_nodes_in_group("white")
-	var combine = [black, white]
+	var white_check : bool
+	var black_check : bool
 
-	for color in combine:
-		for piece in color:
-			prints(piece.data.index, piece.data.name, piece.data.moves_empty, piece.data.moves_attack, piece.data.moves_defend)
+	# white
+	var attack_moves = Global.attack_map["black"]
+	var move_moves = Global.move_map["black"]
+	var white_king = Global.white_king_index
+
+	#printt(white_king, attack_moves)
+	if attack_moves.has(white_king):
+		print("THE WHITE KING IS BEING ATTACKED")
+		white_check = true
+	else:
+		white_check = false
+
+# black
+	var Battack_moves = Global.attack_map["white"]
+	var Bmove_moves = Global.move_map["white"]
+	var black_king = Global.black_king_index
+
+	#printt(black_king, attack_moves)
+	if Battack_moves.has(black_king):
+		print("THE BLACK KING IS BEING ATTACKED")
+		black_check = true
+	else:
+		black_check = false
+
+	return [white_check, black_check]
+
+
+	#for piece in side:
+		#prints(piece.data.index, piece.data.name, piece.data.moves_empty, piece.data.moves_attack, piece.data.moves_defend)
+
+
 
 func setup_move(piece, target_square, return_square):
 
@@ -195,13 +224,11 @@ func index_snap_to(piece, square, movetype):
 
 	#var look = _king_check(pi)
 	#print("INDEX SNAP TO BOARD STATE \n")
-	review_board_state()
+
 	# sound
 	play_sound("move_self")
 
 	# world update
-
-
 	if movetype != "return":
 		var old = piece.data.index
 		piece.data.old_index = old
@@ -210,10 +237,21 @@ func index_snap_to(piece, square, movetype):
 		emit_signal("piece_placed", piece, square)
 		emit_signal("update_turn")
 
+		update_all_moves()
+		#look for check
+		var check = review_board_state()
+		if check[0] == true:
+			print("white king check identified")
+		if check[1] == true:
+			print("black king check identified")
+
 	else:
 		emit_signal("clear_overlay")
 
 	update_moves(piece)
+
+
+
 	reset_dragged_piece(piece)
 
 func _king_check(color, enemy):
@@ -237,8 +275,8 @@ func _king_check(color, enemy):
 			if danger_moves.has(square):
 				restricted_squares.append(square);
 
-	if attack_moves.has(king):
-		print("KING IS IN CHECK")
+		if attack_moves.has(king):
+			print("KING IS IN CHECK")
 
 
 
@@ -503,7 +541,7 @@ func get_pawn_moves(piece):
 	var moves = []
 	var index = piece.data.index
 
-	print("PAWN MOVES: checking global black index: \n", Global.black_index)
+	#print("PAWN MOVES: checking global black index: \n", Global.black_index)
 
 	# ADD EN PASSANT ATTACK
 	if piece.data.color == "white":
@@ -744,10 +782,14 @@ func find_blockers(piece, moves):
 	else:
 		return _final_moves
 
+func update_all_moves():
+	var allpieces = get_tree().get_nodes_in_group("pieces")
 
+	for piece in allpieces:
+		update_moves(piece)
 
 func update_moves(piece):
-	printt("should be empty: ", piece.data.moves_empty, piece.data.moves_attack, piece.data.moves_defend)
+
 	match piece.data.ptype:
 		0:
 			get_pawn_moves(piece)
@@ -768,7 +810,7 @@ func update_moves(piece):
 
 	for child in overlay.get_children():
 		overlay.remove_child(child)
-	printt("should be updated: ", piece.data.moves_empty, piece.data.moves_attack, piece.data.moves_defend)
+	#printt("should be updated: ", piece.data.moves_empty, piece.data.moves_attack, piece.data.moves_defend)
 
 func find_my_checks(color):
 

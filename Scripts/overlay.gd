@@ -91,7 +91,7 @@ func display_attack_moves(piece, moves):
 	else:
 		piece_color = piece.data.color
 
-	print("the moves the attack overlay gets ", piece.data.index, "  ", moves)
+	#print("the moves the attack overlay gets ", piece.data.index, "  ", moves)
 	for i in moves:
 		var _position = Vector2(Global.square_coordinates[i][0], Global.square_coordinates[i][1])
 		var _overlay = create_overlay_rect("red", _position)

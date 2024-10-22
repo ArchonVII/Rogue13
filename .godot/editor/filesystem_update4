@@ -40,3 +40,4 @@ res://Scripts/main.gd
 res://Scripts/piece_creator.gd
 res://Scripts/overlay.gd
 res://Scripts/piece_resource.gd
+res://Scripts/Global.gd

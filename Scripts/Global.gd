@@ -73,6 +73,7 @@ var king_index_map = {"white": white_king_index, "black": black_king_index}
 
 var white_in_check = false
 var black_in_check = false
+var king_check_map = {"white": white_in_check, "black": black_in_check}
 
 
 #endregion
