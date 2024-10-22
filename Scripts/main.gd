@@ -19,6 +19,7 @@ func _ready():
 	$Pieces.connect("set_target_square", Callable(self, "_set_target_square"))
 	$Pieces.connect("piece_placed", Callable(self, "_piece_placed"))
 	$Pieces.connect("update_turn", Callable(self, "_update_turn"))
+	$Pieces.connect("enemy_king_in_check", Callable(self, "_enemy_king_in_check"))
 
 
 
@@ -56,6 +57,14 @@ func _update_Sindex(square):
 	$Container/MarginContainer/DevData/Index_Square.text = "Square Index: " + str(square.data.index)
 	Global.hovered_square = square
 
+func _enemy_king_in_check(piece):
+	if piece.data.color == "white":
+		$HB1/WhiteCheck/WCalert.visible = true
+	else:
+		$HB1/BlackCheck/BCalert.visible = true
+
+
+
 func _piece_placed(piece, square):
 
 	var new_index = square.data.index
@@ -88,6 +97,7 @@ func _piece_placed(piece, square):
 	piece.data.col = new_index % 8
 	piece.data.legal_moves = []
 	$Pieces.update_moves(piece)
+	$Pieces.update_all_moves()
 
 
 

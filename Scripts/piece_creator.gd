@@ -18,6 +18,7 @@ var is_dragging = null
 var dragged_piece_move_list = null
 var dragged_piece_origin_coordinate = null
 var dragged_piece_moves_checked = null
+var return_square = null
 
 signal mask_update
 signal attempted_move(piece, square)
@@ -34,6 +35,8 @@ signal check_overlay(color, moves)
 signal display_empty_moves(piece, moves)
 signal display_attack_moves(piece, moves)
 signal display_defended_squares(piece, moves)
+
+signal enemy_king_in_check(piece)
 
 signal king_check(color)
 
@@ -101,8 +104,9 @@ func _on_piece_clicked(viewport, event, shape_idx, piece):
 
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:					# if the piece is clicked
 		Global.selected_piece = piece # for effect usage
+		piece.data.old_position = Global.hovered_square.position
 
-		var return_square = Global.pickedup_square
+		return_square = Global.pickedup_square
 		if event.pressed and not is_dragging:
 			review_board_state()			# and you're not currently dragging a piece
 			is_dragging = true							# Start dragging
@@ -171,21 +175,24 @@ func review_board_state():
 	var white_check : bool
 	var black_check : bool
 
+	#update_all_moves()
 	# white
 	var attack_moves = Global.attack_map["black"]
-	var move_moves = Global.move_map["black"]
+	var move_moves = Global.move_black
 	var white_king = Global.white_king_index
 
+	print("Black attack moves: ", attack_moves)
 	#printt(white_king, attack_moves)
 	if attack_moves.has(white_king):
 		print("THE WHITE KING IS BEING ATTACKED")
 		white_check = true
 	else:
+		Global.white_in_check = false
 		white_check = false
 
 # black
 	var Battack_moves = Global.attack_map["white"]
-	var Bmove_moves = Global.move_map["white"]
+	var Bmove_moves = Global.move_white
 	var black_king = Global.black_king_index
 
 	#printt(black_king, attack_moves)
@@ -193,6 +200,7 @@ func review_board_state():
 		print("THE BLACK KING IS BEING ATTACKED")
 		black_check = true
 	else:
+		Global.black_in_check = false
 		black_check = false
 
 	return [white_check, black_check]
@@ -205,10 +213,7 @@ func review_board_state():
 
 func setup_move(piece, target_square, return_square):
 
-	print("REVIEW BOARD STATE \n")
-
-
-	# checks, check
+	# check if move is legal
 	if piece.data.moves_empty.has(target_square.data.index):
 		index_snap_to(dragged_piece, target_square, "move")
 		if piece.data.moves_attack.has(target_square.data.index):
@@ -222,13 +227,10 @@ func setup_move(piece, target_square, return_square):
 
 func index_snap_to(piece, square, movetype):
 
-	#var look = _king_check(pi)
-	#print("INDEX SNAP TO BOARD STATE \n")
-
 	# sound
 	play_sound("move_self")
-
-	# world update
+	review_board_state()
+	# is the piece already being sent back to origin square due to restrictions
 	if movetype != "return":
 		var old = piece.data.index
 		piece.data.old_index = old
@@ -241,15 +243,43 @@ func index_snap_to(piece, square, movetype):
 		#look for check
 		var check = review_board_state()
 		if check[0] == true:
-			print("white king check identified")
+			if piece.data.color == "white":
+				my_king_is_now_in_check(piece)
+			else:
+				enemy_has_been_checked(piece)
 		if check[1] == true:
-			print("black king check identified")
+			if piece.data.color == "black":
+				my_king_is_now_in_check(piece)
+			else:
+				enemy_has_been_checked(piece)
+
 
 	else:
 		emit_signal("clear_overlay")
 
 	update_moves(piece)
 
+# Send piece back to square if the move puts their king in check
+func my_king_is_now_in_check(piece):
+	piece.data.index = piece.data.old_index
+	piece.position = return_square.position
+
+
+	# create pin overlay?
+
+# TODO fix resetting the king in check flag
+func enemy_has_been_checked(piece):
+	if piece.data.color == "white":
+		Global.white_in_check = true
+	else:
+		Global.black_in_check = true
+
+	emit_signal("enemy_king_in_check", piece)
+
+
+# TODO for kings to make sure and reset flags
+func am_I_in_check(piece):
+	pass
 
 
 	reset_dragged_piece(piece)
@@ -783,6 +813,14 @@ func find_blockers(piece, moves):
 		return _final_moves
 
 func update_all_moves():
+
+	# delete current
+	#Global.move_black = []
+	#Global.move_white = []
+	#Global.attack_black = []
+	#Global.attack_white = []
+	#Global.defend_black = []
+	#Global.defend_white = []
 	var allpieces = get_tree().get_nodes_in_group("pieces")
 
 	for piece in allpieces:
@@ -1067,4 +1105,33 @@ func _on_vibrate_pressed():
 				child.custom_minimum_size = Vector2(150, 150)
 				child.MOUSE_FILTER_IGNORE
 				child.material = vibrate_shader
+
+
+
+func _on_white_check_toggled(toggled_on: bool) -> void:
+	var members = get_tree().get_nodes_in_group("black")
+	Global.move_black = []
+	Global.attack_black = []
+	Global.defend_black = []
+	for member in members:
+		update_moves(member)
+	#TEST redo for just the squares around the king
+	if toggled_on:
+		emit_signal("king_check", "white", "black")
+	else:
+		emit_signal("clear_overlay")
+
+
+func _on_black_check_toggled(toggled_on: bool) -> void:
+	var members = get_tree().get_nodes_in_group("white")
+	Global.move_white = []
+	Global.attack_white = []
+	Global.defend_white = []
+	for member in members:
+		update_moves(member)
+	#TEST redo for just the squares around the king
+	if toggled_on:
+		emit_signal("king_check", "black", "white")
+	else:
+		emit_signal("clear_overlay")
 #endregion

@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cyelmmna8w8kx"]
+[gd_scene load_steps=19 format=3 uid="uid://cyelmmna8w8kx"]
 
 [ext_resource type="PackedScene" uid="uid://c5mjlw3q7b5hc" path="res://Scenes/board.tscn" id="1_4fud4"]
 [ext_resource type="Script" path="res://Scripts/main.gd" id="1_gkm27"]
@@ -13,6 +13,7 @@
 [ext_resource type="Theme" uid="uid://bhpgkbmfbdcqg" path="res://Themes/black_turn_label.tres" id="11_b2ar8"]
 [ext_resource type="Texture2D" uid="uid://bbvb0saaucgbe" path="res://Images/Pieces/bk.png" id="11_ygvsp"]
 [ext_resource type="Theme" uid="uid://dme0ouyllngy3" path="res://Themes/dark_bg_label.tres" id="12_88yax"]
+[ext_resource type="Material" uid="uid://cdkcbv5xjpo62" path="res://Shaders/invis.tres" id="14_deuge"]
 
 [sub_resource type="Theme" id="Theme_0l35k"]
 default_font_size = 16
@@ -213,6 +214,44 @@ theme = ExtResource("12_88yax")
 theme_override_styles/normal = SubResource("StyleBoxFlat_8xm40")
 text = "Piece Index: "
 
+[node name="HB1" type="HBoxContainer" parent="."]
+offset_left = 1255.0
+offset_top = 448.0
+offset_right = 1575.0
+offset_bottom = 606.0
+scale = Vector2(0.5, 0.5)
+
+[node name="WhiteCheck" type="Button" parent="HB1"]
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+icon = ExtResource("10_r0d6t")
+
+[node name="WCalert" type="ColorRect" parent="HB1/WhiteCheck"]
+visible = false
+material = ExtResource("14_deuge")
+layout_mode = 1
+anchors_preset = -1
+offset_left = 18.0
+offset_top = 18.0
+offset_right = 148.0
+offset_bottom = 144.0
+color = Color(1, 0.0431373, 0.0313726, 1)
+
+[node name="BlackCheck" type="Button" parent="HB1"]
+layout_mode = 2
+icon = ExtResource("11_ygvsp")
+
+[node name="BCalert" type="CanvasLayer" parent="HB1/BlackCheck"]
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="HB1/BlackCheck/BCalert"]
+material = ExtResource("14_deuge")
+offset_left = 1343.0
+offset_top = 455.0
+offset_right = 1409.0
+offset_bottom = 521.0
+color = Color(1, 0, 0, 1)
+
 [connection signal="toggled" from="Restrictions/FreeMovement" to="." method="_on_free_movement_toggled"]
 [connection signal="toggled" from="Restrictions/Turn Restriction" to="." method="_on_turn_restriction_toggled"]
 [connection signal="toggled" from="VBoxContainer2/Button" to="Pieces" method="_on_button_toggled"]
@@ -220,3 +259,5 @@ text = "Piece Index: "
 [connection signal="pressed" from="VBoxContainer2/Button3" to="Overlay" method="_on_button_3_pressed"]
 [connection signal="toggled" from="VBoxContainer3/Pixelate" to="Pieces" method="_on_pixelate_toggled"]
 [connection signal="pressed" from="VBoxContainer3/Vibrate" to="Pieces" method="_on_vibrate_pressed"]
+[connection signal="toggled" from="HB1/WhiteCheck" to="Pieces" method="_on_white_check_toggled"]
+[connection signal="toggled" from="HB1/BlackCheck" to="Pieces" method="_on_black_check_toggled"]

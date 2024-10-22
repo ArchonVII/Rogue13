@@ -24,7 +24,7 @@ enum CheckStatus { NONE, CHECKED, CHECKING, PINNED, PINNING }
 # location variables
 @export var position : Vector2
 @export var previous_square : String
-@export var previous_position : Vector2
+@export var old_position : Vector2
 @export var target_position : Vector2
 
 # visual based variables
