@@ -50,7 +50,7 @@ script = ExtResource("5_60lbi")
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(-150, -150)
 anchor_mode = 0
-zoom = Vector2(0.75, 0.75)
+zoom = Vector2(0.5, 0.5)
 
 [node name="Sound" type="Node" parent="."]
 
@@ -153,7 +153,7 @@ layout_mode = 2
 
 [node name="Container" type="Panel" parent="."]
 clip_contents = true
-anchors_preset = -1
+anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = 1259.0

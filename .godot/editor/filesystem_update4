@@ -1,9 +1,9 @@
 res://Scenes/main.tscn
+res://Scripts/board_manager.gd
 res://SquareMods/Square_Fire.tres
 res://SquareMods/Square_Fire_Orange.tres
 res://SquareMods/Square_Fire_Yellow.gdshader
 res://SquareMods/Square_Fire_Yellow.tres
-res://Scripts/board_manager.gd
 res://Shaders/pixelate4.gdshader
 res://Shaders/pixelate4.tres
 res://Shaders/invs.gdshader
@@ -17,7 +17,6 @@ res://Shaders/teleport.gdshader
 res://Shaders/outline.tres
 res://Shaders/pixelate2.gdshader
 res://Shaders/coloroutline.gdshader
-res://Shaders/rain.gdshader
 res://Shaders/hologram.gdshader
 res://Shaders/burn.gdshader
 res://Shaders/trail.gdshader
@@ -34,10 +33,3 @@ res://SquareMods/Square_Fire.tscn
 res://PieceMods/staticpiece.tscn
 res://SquareMods/iso_board.tscn
 res://Scenes/Master_Square.tscn
-res://Shaders/crt_2.gdshader
-res://Shaders/crt_2.tres
-res://Scripts/main.gd
-res://Scripts/piece_creator.gd
-res://Scripts/overlay.gd
-res://Scripts/piece_resource.gd
-res://Scripts/Global.gd
