@@ -19,7 +19,7 @@ vec2 get_mid_uv(vec2 coords, vec2 px_size) {
 	if (coords.x < 1.0)
 		px_mid_x = px_size.x * ( floor(coords.x / px_size.x) + 1.0 / 2.0 );
 	if (coords.y < 1.0)
-		px_mid_y = px_size.y * ( floor(coords.y / px_size.y) + 1.0 / 2.0 ); 
+		px_mid_y = px_size.y * ( floor(coords.y / px_size.y) + 1.0 / 2.0 );
 	return vec2(px_mid_x, px_mid_y);
 }
 
@@ -29,11 +29,11 @@ void fragment() {
 	float UV_X = (UV.x * nb_frames.x - frame_coords.x);
 	float UV_Y = (UV.y * nb_frames.y - frame_coords.y);
 	vec2 uv = vec2(UV_X, UV_Y);
-	
-	// Limite velocity à trail_size pixels max 
+
+	// Limite velocity à trail_size pixels max
 	vec2 v_dir = normalize(velocity);
 	float v_length = length(velocity) * trail_size / velocity_max;
-	
+
 	float alpha_step = (alpha_start - alpha_tail) / trail_size;
 	float alpha = alpha_tail;
 	while (v_length > 0.0) {

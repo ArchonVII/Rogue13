@@ -15,9 +15,10 @@ extends Node2D
 var piece_scene = load("res://Scenes/Master_Piece.tscn")
 var dragged_piece = null
 var is_dragging = null
-var dragged_piece_move_list = null
-var dragged_piece_origin_coordinate = null
-var dragged_piece_moves_checked = null
+
+var right_is_dragging = false
+var dragged_arrow = null
+
 var return_square = null
 
 signal mask_update
@@ -76,26 +77,11 @@ func _create_tooltip(piece):
 
 #region movement
 func _process(delta):
-
+	var offset = Global.square_size * 0.5
 	if is_dragging and dragged_piece:
-		# HACK could mess it up
-		if !dragged_piece_move_list and !dragged_piece_moves_checked:
-
-			if Global.free_movement == false:
-				dragged_piece_origin_coordinate = dragged_piece.position
-				#print("dragged piece position / origin coordinate ", dragged_piece_origin_coordinate, " - ", dragged_piece.position)
-
-			else:
-				dragged_piece_origin_coordinate = dragged_piece.position
-
-			dragged_piece_moves_checked = true
-
-		var offset = Global.square_size * 0.5
 		var globalpos =get_global_mouse_position() * 1.75
-
-
-		# HACK changed mouse position
 		dragged_piece.position = get_global_mouse_position() - Vector2(offset, offset)
+
 
 
 
@@ -113,9 +99,9 @@ func _on_piece_clicked(viewport, event, shape_idx, piece):
 			dragged_piece = piece 						# set global
 
 			reset_piece_moves(dragged_piece)
-			update_moves(dragged_piece)
+			update_moves(dragged_piece) # ?
 			emit_signal("piece_index_label", piece)
-			find_moves(dragged_piece)
+			find_moves(dragged_piece) # ?
 
 
 		elif not event.pressed and is_dragging:			# if the mouse is let go after dragging
@@ -146,6 +132,7 @@ func _on_piece_clicked(viewport, event, shape_idx, piece):
 					for tip in tooltip_node.get_children():
 						tip.queue_free()
 					_create_tooltip(piece)
+
 
 func find_moves(piece):
 	match piece.data.ptype:
@@ -851,16 +838,6 @@ func update_moves(piece):
 	#printt("should be updated: ", piece.data.moves_empty, piece.data.moves_attack, piece.data.moves_defend)
 
 func find_my_checks(color):
-
-	"""if color == "white":
-		if Movement.black_moves.size() > 1:
-			if Movement.black_moves_turn == Movement.last_black_move_check:
-				emit_signal("check_overlay", color, Movement.black_moves)
-				return
-			else:
-				Movement.black_moves = []"""
-
-
 	var members = []
 	var threat_moves = []
 	if color == "white":
@@ -876,14 +853,6 @@ func find_my_checks(color):
 				if !threat_moves.has(arr[i][j]):
 					threat_moves.append(arr[i][j])
 
-	# remove defense moves
-	"""for i in threat_moves:
-		if color == "white":
-			if Global.black_index.has(i):
-				threat_moves.erase(i)
-		else:
-			if Global.white_index.has(i):
-				threat_moves.erase(i)"""
 
 	emit_signal("check_overlay", color, threat_moves)
 	#print(threat_moves)
@@ -894,9 +863,6 @@ func find_my_checks(color):
 #region utility
 
 func reset_dragged_piece(piece):
-	dragged_piece_move_list = null
-	dragged_piece_origin_coordinate = null
-	dragged_piece_moves_checked = null
 	dragged_piece = null
 
 # help for grabbing all moves

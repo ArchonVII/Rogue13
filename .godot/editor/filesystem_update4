@@ -24,6 +24,8 @@ res://Shaders/trail.gdshader
 res://Shaders/colorcycle.gdshader
 res://SquareMods/Square_Fire_pixel.gdshader
 res://Shaders/Pieces/simplehighlight.gdshader
+res://Shaders/crt_2.gdshader
+res://Scripts/piece_creator.gd
 res://Scenes/pieces.tscn
 res://Scenes/Master_Piece.tscn
 res://Scenes/tooltip.tscn
@@ -34,10 +36,3 @@ res://SquareMods/Square_Fire.tscn
 res://PieceMods/staticpiece.tscn
 res://SquareMods/iso_board.tscn
 res://Scenes/Master_Square.tscn
-res://Shaders/crt_2.gdshader
-res://Shaders/crt_2.tres
-res://Scripts/main.gd
-res://Scripts/piece_creator.gd
-res://Scripts/overlay.gd
-res://Scripts/piece_resource.gd
-res://Scripts/Global.gd

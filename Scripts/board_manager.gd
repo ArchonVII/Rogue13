@@ -3,7 +3,8 @@ extends Node
 """
 Board Manager creates the squares and monitors actions performed on the squares
 """
-
+var right_is_dragging = false
+var dragged_arrow = null
 var debug_board = false
 var board_coordinates = [] # holds array of square locations based on size
 var debug_coordinates = [] # debug mirror board
@@ -13,8 +14,16 @@ var square_scene = load("res://Scenes/Master_Square.tscn")
 signal sig_square_piece_clicked
 signal square_index_label(square)
 
-func _ready() -> void:
+func _ready():
 	create_square()
+
+"""
+func _process(delta):
+	var offset = Global.square_size * 0.5
+	if right_is_dragging and dragged_arrow:
+		dragged_arrow.position = get_global_mouse_position() - Vector2(offset, offset)"""
+
+
 
 #region Mouse responses
 func _on_square_clicked(viewport, event, shape_idx, square):
@@ -37,8 +46,11 @@ func _on_square_clicked(viewport, event, shape_idx, square):
 		Global.dropped_square = square.data.index
 
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
-		#print("square input 4 test: square right click")
-		pass
+		print("right mouse click")
+		if event.pressed and not right_is_dragging:
+			right_is_dragging = true
+			print("got to the right drag")
+			#overlay.draw_arrow(Global.hovered_square, get_global_mouse_position(),"move")
 
 func _on_square_hovered(square):
 	emit_signal("square_index_label", square)
