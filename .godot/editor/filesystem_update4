@@ -1,4 +1,4 @@
-res://Scenes/main.tscn
+res://Resources/master_card.tscn
 res://SquareMods/Square_Fire.tres
 res://SquareMods/Square_Fire_Orange.tres
 res://SquareMods/Square_Fire_Yellow.gdshader
@@ -25,13 +25,12 @@ res://Shaders/colorcycle.gdshader
 res://SquareMods/Square_Fire_pixel.gdshader
 res://Shaders/Pieces/simplehighlight.gdshader
 res://Shaders/crt_2.gdshader
-res://Scripts/piece_creator.gd
+res://Scenes/main.tscn
 res://Scenes/pieces.tscn
 res://Scenes/Master_Piece.tscn
 res://Scenes/tooltip.tscn
 res://Shaders/Pieces/card.tscn
 res://Shaders/Pieces/CardDemo.tscn
-res://Resources/master_card.tscn
 res://SquareMods/Square_Fire.tscn
 res://PieceMods/staticpiece.tscn
 res://SquareMods/iso_board.tscn

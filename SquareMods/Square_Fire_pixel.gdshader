@@ -18,8 +18,8 @@ void fragment() {
 	final_color.a = final_color.r;
 	//final_color += vec4(0.5, 0.1, 0.1, 1)
 	final_color.rgb = flame_color.rgb;
-	
-	
+
+
 	ivec2 size = textureSize(TEXTURE, 0);
 	int xRes = size.x;
 	int yRes = size.y;
@@ -28,12 +28,12 @@ void fragment() {
 	float grid_uv_x = round(UV.x * xFactor) / xFactor;
 	float grid_uv_y = round(UV.y * yFactor) / yFactor;
 	vec4 text = texture(TEXTURE, vec2(grid_uv_x, grid_uv_y));
-	
+
 	//COLOR = final_color;
-	
-	
+
+
 	COLOR = mix(first_color, second_color,1.0);
-	
+
 }
 
 
